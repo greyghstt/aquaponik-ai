@@ -1,0 +1,45 @@
+{
+  "poster_rows": 336,
+  "training_rows": 2160,
+  "no_missing_values": true,
+  "hourly_timestamp_consistency": true,
+  "sensor_ranges_ok": true,
+  "water_temp_do_negative_corr": -0.646,
+  "light_air_temp_positive_corr": 0.75,
+  "nitrate_smoother_than_ammonia": true,
+  "all_ai_classes_in_training": [
+    "Amonia tinggi",
+    "DO rendah",
+    "Level air rendah",
+    "Nitrit tinggi",
+    "Normal",
+    "Nutrisi rendah",
+    "Risiko stres ikan",
+    "Suhu air tinggi",
+    "pH tidak stabil"
+  ],
+  "macro_f1_minimum_met": true,
+  "accuracy_minimum_met": true,
+  "expected_files_exist": {
+    "C:\\vscode\\Grand Design AI\\outputs\\sensor_dataset.csv": true,
+    "C:\\vscode\\Grand Design AI\\outputs\\training_dataset.csv": true,
+    "C:\\vscode\\Grand Design AI\\outputs\\metrics.json": true,
+    "C:\\vscode\\Grand Design AI\\outputs\\dashboard.html": true,
+    "C:\\vscode\\Grand Design AI\\outputs\\rf_model.joblib": true,
+    "C:\\vscode\\Grand Design AI\\outputs\\plots\\tren_sensor_14_hari.png": true,
+    "C:\\vscode\\Grand Design AI\\outputs\\plots\\status_ai_timeline.png": true,
+    "C:\\vscode\\Grand Design AI\\outputs\\plots\\feature_importance_rf.png": true,
+    "C:\\vscode\\Grand Design AI\\outputs\\plots\\distribusi_kelas.png": true,
+    "C:\\vscode\\Grand Design AI\\outputs\\plots\\confusion_matrix.png": true
+  },
+  "all_expected_files_exist": true,
+  "domain_thresholds": {
+    "pH_operasional": "6.5-7.5",
+    "do_low_mg_l": 5.0,
+    "suhu_air_tinggi_c": 30.0,
+    "amonia_tinggi_mg_l": 0.5,
+    "nitrit_tinggi_mg_l": 0.25,
+    "ec_target_selada_ms_cm": "1.2-1.8"
+  },
+  "verification_passed": true
+}

@@ -1,0 +1,95 @@
+{
+  "accuracy": 0.9926,
+  "macro_f1": 0.9798,
+  "weighted_f1": 0.9927,
+  "n_train": 1620,
+  "n_test": 540,
+  "labels_present": [
+    "Normal",
+    "DO rendah",
+    "Amonia tinggi",
+    "Nitrit tinggi",
+    "Nutrisi rendah",
+    "pH tidak stabil",
+    "Level air rendah",
+    "Suhu air tinggi",
+    "Risiko stres ikan"
+  ],
+  "classification_report": {
+    "Normal": {
+      "precision": 0.9969418960244648,
+      "recall": 0.9969418960244648,
+      "f1-score": 0.9969418960244648,
+      "support": 327.0
+    },
+    "DO rendah": {
+      "precision": 0.8421052631578947,
+      "recall": 1.0,
+      "f1-score": 0.9142857142857143,
+      "support": 16.0
+    },
+    "Amonia tinggi": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 41.0
+    },
+    "Nitrit tinggi": {
+      "precision": 1.0,
+      "recall": 0.967741935483871,
+      "f1-score": 0.9836065573770492,
+      "support": 62.0
+    },
+    "Nutrisi rendah": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 13.0
+    },
+    "pH tidak stabil": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 37.0
+    },
+    "Level air rendah": {
+      "precision": 1.0,
+      "recall": 0.8571428571428571,
+      "f1-score": 0.9230769230769231,
+      "support": 7.0
+    },
+    "Suhu air tinggi": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 18.0
+    },
+    "Risiko stres ikan": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 19.0
+    },
+    "accuracy": 0.9925925925925926,
+    "macro avg": {
+      "precision": 0.9821163510202623,
+      "recall": 0.9802029654056881,
+      "f1-score": 0.9797678989737947,
+      "support": 540.0
+    },
+    "weighted avg": {
+      "precision": 0.9934697855750486,
+      "recall": 0.9925925925925926,
+      "f1-score": 0.9927291045323833,
+      "support": 540.0
+    }
+  },
+  "plot_paths": {
+    "sensor_trends": "C:\\vscode\\Grand Design AI\\outputs\\plots\\tren_sensor_14_hari.png",
+    "status_timeline": "C:\\vscode\\Grand Design AI\\outputs\\plots\\status_ai_timeline.png",
+    "feature_importance": "C:\\vscode\\Grand Design AI\\outputs\\plots\\feature_importance_rf.png",
+    "class_distribution": "C:\\vscode\\Grand Design AI\\outputs\\plots\\distribusi_kelas.png",
+    "confusion_matrix": "C:\\vscode\\Grand Design AI\\outputs\\plots\\confusion_matrix.png"
+  },
+  "dashboard_path": "C:\\vscode\\Grand Design AI\\outputs\\dashboard.html"
+}
