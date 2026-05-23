@@ -1,7 +1,7 @@
 {
   "accuracy": 0.9981,
-  "macro_f1": 0.9863,
-  "weighted_f1": 0.9981,
+  "macro_f1": 0.9628,
+  "weighted_f1": 0.9978,
   "n_train": 1620,
   "n_test": 540,
   "labels_present": [
@@ -17,28 +17,28 @@
   ],
   "classification_report": {
     "Normal": {
+      "precision": 0.9978494623655914,
+      "recall": 1.0,
+      "f1-score": 0.9989235737351991,
+      "support": 464.0
+    },
+    "DO rendah": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 447.0
-    },
-    "DO rendah": {
-      "precision": 0.9375,
-      "recall": 1.0,
-      "f1-score": 0.967741935483871,
-      "support": 15.0
+      "support": 13.0
     },
     "Amonia tinggi": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 20.0
+      "support": 12.0
     },
     "Nitrit tinggi": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 9.0
+      "support": 5.0
     },
     "Nutrisi rendah": {
       "precision": 1.0,
@@ -50,37 +50,37 @@
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 32.0
+      "support": 31.0
     },
     "Level air rendah": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 3.0
+      "support": 2.0
     },
     "Suhu air tinggi": {
       "precision": 1.0,
-      "recall": 1.0,
-      "f1-score": 1.0,
-      "support": 3.0
+      "recall": 0.5,
+      "f1-score": 0.6666666666666666,
+      "support": 2.0
     },
     "Risiko stres ikan": {
       "precision": 1.0,
-      "recall": 0.8333333333333334,
-      "f1-score": 0.9090909090909091,
+      "recall": 1.0,
+      "f1-score": 1.0,
       "support": 6.0
     },
     "accuracy": 0.9981481481481481,
     "macro avg": {
-      "precision": 0.9930555555555556,
-      "recall": 0.9814814814814815,
-      "f1-score": 0.9863147605083089,
+      "precision": 0.9997610513739547,
+      "recall": 0.9444444444444444,
+      "f1-score": 0.9628433600446518,
       "support": 540.0
     },
     "weighted avg": {
-      "precision": 0.9982638888888888,
+      "precision": 0.9981521306252489,
       "recall": 0.9981481481481481,
-      "f1-score": 0.9980938416422288,
+      "f1-score": 0.9978405028638254,
       "support": 540.0
     }
   },

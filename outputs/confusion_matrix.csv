@@ -1,10 +1,10 @@
 ,Normal,DO rendah,Amonia tinggi,Nitrit tinggi,Nutrisi rendah,pH tidak stabil,Level air rendah,Suhu air tinggi,Risiko stres ikan
-Normal,447,0,0,0,0,0,0,0,0
-DO rendah,0,15,0,0,0,0,0,0,0
-Amonia tinggi,0,0,20,0,0,0,0,0,0
-Nitrit tinggi,0,0,0,9,0,0,0,0,0
+Normal,464,0,0,0,0,0,0,0,0
+DO rendah,0,13,0,0,0,0,0,0,0
+Amonia tinggi,0,0,12,0,0,0,0,0,0
+Nitrit tinggi,0,0,0,5,0,0,0,0,0
 Nutrisi rendah,0,0,0,0,5,0,0,0,0
-pH tidak stabil,0,0,0,0,0,32,0,0,0
-Level air rendah,0,0,0,0,0,0,3,0,0
-Suhu air tinggi,0,0,0,0,0,0,0,3,0
-Risiko stres ikan,0,1,0,0,0,0,0,0,5
+pH tidak stabil,0,0,0,0,0,31,0,0,0
+Level air rendah,0,0,0,0,0,0,2,0,0
+Suhu air tinggi,1,0,0,0,0,0,0,1,0
+Risiko stres ikan,0,0,0,0,0,0,0,0,6

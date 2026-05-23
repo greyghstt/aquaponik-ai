@@ -29,6 +29,43 @@ def _range_severity(
     )
 
 
+def _overall_severity(condition_scores: dict[str, float]) -> float:
+    """Blend peak severity with cumulative sensor pressure.
+
+    A single critical condition must stay visible, but the overall monitor should
+    not behave like a pure max alarm. The weighted average lets several moderate
+    warnings accumulate into a higher risk, similar to real control dashboards.
+    """
+
+    impact = {
+        "DO rendah": 1.00,
+        "Amonia tinggi": 1.00,
+        "Nitrit tinggi": 1.00,
+        "Nutrisi rendah": 0.90,
+        "pH tidak stabil": 0.92,
+        "Level air rendah": 0.84,
+        "Suhu air tinggi": 0.90,
+        "Risiko stres ikan": 1.00,
+        "Greenhouse warning": 0.45,
+    }
+    priority_weights = {
+        "DO rendah": 1.25,
+        "Amonia tinggi": 1.20,
+        "Nitrit tinggi": 1.15,
+        "Nutrisi rendah": 0.90,
+        "pH tidak stabil": 0.95,
+        "Level air rendah": 0.85,
+        "Suhu air tinggi": 1.05,
+        "Risiko stres ikan": 1.30,
+        "Greenhouse warning": 0.45,
+    }
+    adjusted = {name: condition_scores[name] * impact[name] for name in impact}
+    weighted_sum = sum(adjusted[name] * weight for name, weight in priority_weights.items())
+    weighted_average = weighted_sum / sum(priority_weights.values())
+    max_severity = max(adjusted.values())
+    return min(0.75 * max_severity + 0.25 * weighted_average, 1.0)
+
+
 def calculate_condition_scores(row: pd.Series) -> dict[str, float]:
     do_score = _severity(row.do_mg_l, RANGES.do_warning_mg_l, RANGES.do_critical_mg_l, "low")
     ammonia_score = _severity(row.amonia_mg_l, RANGES.ammonia_warning_mg_l, RANGES.ammonia_critical_mg_l, "high")
@@ -83,18 +120,7 @@ def calculate_condition_scores(row: pd.Series) -> dict[str, float]:
     if row.amonia_mg_l > 0.75 and row.ph_air > 7.5:
         fish_stress_score += 0.12
 
-    overall = max(
-        do_score,
-        ammonia_score,
-        nitrite_score,
-        nutrient_score * 0.90,
-        ph_score * 0.92,
-        level_score * 0.84,
-        temp_score * 0.90,
-        greenhouse_score * 0.45,
-        fish_stress_score,
-    )
-    return {
+    condition_scores = {
         "Normal": 0.0,
         "DO rendah": do_score,
         "Amonia tinggi": ammonia_score,
@@ -105,8 +131,9 @@ def calculate_condition_scores(row: pd.Series) -> dict[str, float]:
         "Suhu air tinggi": temp_score,
         "Risiko stres ikan": min(fish_stress_score, 1.0),
         "Greenhouse warning": greenhouse_score,
-        "overall": min(overall, 1.0),
     }
+    condition_scores["overall"] = _overall_severity({key: value for key, value in condition_scores.items() if key != "Normal"})
+    return condition_scores
 
 
 def assign_risk_level(risk_score: float) -> str:
@@ -119,8 +146,6 @@ def assign_risk_level(risk_score: float) -> str:
 
 def assign_ai_label(row: pd.Series) -> str:
     scores = calculate_condition_scores(row)
-    if scores["overall"] < 0.70:
-        return "Normal"
 
     # Combined fish stress is more useful than a single alarm when several risks co-occur.
     moderate_count = sum(scores[label] >= 0.45 for label in LABEL_ORDER if label not in {"Normal", "Risiko stres ikan"})
@@ -139,6 +164,10 @@ def assign_ai_label(row: pd.Series) -> str:
         "Nutrisi rendah",
     ]
     best = max(priority, key=lambda label: scores[label])
+    if scores[best] >= 0.85:
+        return best
+    if scores["overall"] < 0.70:
+        return "Normal"
     return best if scores[best] >= 0.70 else "Normal"
 
 

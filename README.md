@@ -89,7 +89,7 @@ Pipeline menghasilkan visual berikut:
 Hasil dari eksekusi terakhir:
 
 - Accuracy: `0.9981`
-- Macro F1-score: `0.9863`
+- Macro F1-score: `0.9628`
 - Verifikasi simulasi: `passed`
 - Horizon simulasi dashboard: `14 hari`, interval `1 jam`
 
