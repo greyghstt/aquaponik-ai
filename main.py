@@ -11,17 +11,19 @@ from verification import save_json, verify_simulation
 from visualization import create_all_plots
 
 
-def _write_poster_summary(latest_row, metrics: dict, verification: dict) -> None:
+def _write_project_summary(latest_row, metrics: dict, verification: dict) -> None:
     lines = [
-        "# Ringkasan Poster Grand Design AI Smart Greenhouse Aquaponik",
+        "# Ringkasan Project Grand Design AI Smart Greenhouse Aquaponik",
         "",
         "## Konsep Sistem",
         "sensor -> preprocessing -> AI -> klasifikasi -> rekomendasi -> tindakan semi-otomatis -> dashboard",
         "",
         "## Output AI Terakhir",
-        f"- Status: {latest_row['rf_prediction']}",
+        f"- Final AI class: {latest_row['rf_prediction']}",
+        f"- Raw Random Forest class: {latest_row['rf_raw_prediction']}",
         f"- Confidence RF: {latest_row['rf_confidence_pct']:.1f}%",
         f"- Skor risiko: {latest_row['risk_score']:.1f}/100",
+        f"- Risk level: {latest_row['risk_level']}",
         f"- Rekomendasi: {recommendation_for_status(latest_row)}",
         f"- Tindakan semi-otomatis: {action_for_status(latest_row)}",
         "",
@@ -42,7 +44,7 @@ def _write_poster_summary(latest_row, metrics: dict, verification: dict) -> None
         "## Catatan Referensi Domain",
     ]
     lines.extend(f"- {note} ({link})" for note, link in zip(REFERENCE_NOTES, REFERENCE_LINKS, strict=False))
-    (OUTPUT_DIR / "poster_summary.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (OUTPUT_DIR / "project_summary.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main() -> None:
@@ -84,14 +86,15 @@ def main() -> None:
     save_json(metrics, OUTPUT_DIR / "metrics.json")
     verification = verify_simulation(poster_predicted, training_df, result.metrics)
     save_json(verification, OUTPUT_DIR / "verification.json")
-    _write_poster_summary(poster_predicted.iloc[-1], result.metrics, verification)
+    _write_project_summary(poster_predicted.iloc[-1], result.metrics, verification)
 
     print("Grand Design AI Smart Greenhouse Aquaponik simulation complete.")
     print(f"Dashboard: {dashboard_path}")
     print(f"Accuracy: {result.metrics['accuracy']:.4f}")
     print(f"Macro F1: {result.metrics['macro_f1']:.4f}")
     print(f"Verification passed: {verification['verification_passed']}")
-    print("Latest AI status:", poster_predicted.iloc[-1]["rf_prediction"])
+    print("Latest final AI class:", poster_predicted.iloc[-1]["rf_prediction"])
+    print("Latest risk level:", poster_predicted.iloc[-1]["risk_level"])
 
 
 if __name__ == "__main__":

@@ -101,7 +101,7 @@ def generate_sensor_data(
     cloud_daily = np.repeat(rng.uniform(0.72, 1.03, days), 24)[:periods]
     slow_weather = _smooth_random_walk(rng, periods, scale=0.08, pull=0.018)
     light_noise = rng.normal(0, 450, periods)
-    intensitas_cahaya_lux = np.clip(65000 * solar_shape * cloud_daily + light_noise, 0, 68000)
+    intensitas_cahaya_lux = np.clip(38000 * solar_shape * cloud_daily + light_noise, 0, 43000)
     intensitas_cahaya_lux[solar_shape == 0] = np.clip(rng.normal(45, 25, (solar_shape == 0).sum()), 0, 130)
 
     suhu_udara_c = (
@@ -217,7 +217,8 @@ def generate_sensor_data(
     )
     do_mg_l = np.clip(do_baseline, 2.6, 8.4)
 
-    tds_ppm = ec_ms_cm * 640 + rng.normal(0, 9, periods)
+    # Use a 500-scale conversion so EC 1.0-1.8 mS/cm maps to 500-900 ppm.
+    tds_ppm = ec_ms_cm * 500 + rng.normal(0, 8, periods)
 
     df = pd.DataFrame(
         {

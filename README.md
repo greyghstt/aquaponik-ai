@@ -1,7 +1,8 @@
 # Grand Design AI Smart Greenhouse Aquaponik
 
 Simulasi end-to-end **Smart Greenhouse Aquaponik ikan nila + selada**
-berbasis **Random Forest Classifier** untuk kebutuhan poster akademik.
+berbasis **Random Forest Classifier** untuk tugas mata kuliah
+**Kecerdasan Artifisial**.
 
 Pipeline ini mensimulasikan pembacaan sensor realistis, melakukan labeling
 hybrid berbasis domain aquaponik, melatih model AI, membuat visualisasi, dan
@@ -66,14 +67,14 @@ Semua hasil akan dibuat ulang di folder `outputs/`.
 ## Hasil Utama
 
 - Dashboard: `outputs/dashboard.html`
-- Dataset poster: `outputs/sensor_dataset.csv`
+- Dataset simulasi 14 hari: `outputs/sensor_dataset.csv`
 - Dataset training: `outputs/training_dataset.csv`
 - Model Random Forest: `outputs/rf_model.joblib`
 - Evaluasi model: `outputs/metrics.json`
 - Verifikasi simulasi: `outputs/verification.json`
-- Grafik poster: `outputs/plots/`
+- Grafik visualisasi: `outputs/plots/`
 
-## Visualisasi Poster
+## Visualisasi
 
 Pipeline menghasilkan visual berikut:
 
@@ -87,10 +88,10 @@ Pipeline menghasilkan visual berikut:
 
 Hasil dari eksekusi terakhir:
 
-- Accuracy: `0.9926`
-- Macro F1-score: `0.9798`
+- Accuracy: `0.9981`
+- Macro F1-score: `0.9863`
 - Verifikasi simulasi: `passed`
-- Horizon poster: `14 hari`, interval `1 jam`
+- Horizon simulasi dashboard: `14 hari`, interval `1 jam`
 
 ## Catatan Realisme Simulasi
 
@@ -105,8 +106,9 @@ masuk akal:
 - nitrat dan EC/TDS berubah lebih lambat,
 - level air turun bertahap karena evaporasi dan penggunaan sistem.
 
-Dashboard juga memakai safety guardrail sederhana agar kondisi domain-risk yang
-jelas, seperti pH tidak stabil, tidak tersembunyi sebagai kondisi normal.
+Labeling dipisahkan menjadi `risk_score`, `risk_level`, dan `final_ai_class`.
+Parameter warning menaikkan risiko, sedangkan kelas final baru berubah ketika
+kondisi sudah cukup dominan atau mendekati critical.
 
 ## Referensi Domain
 

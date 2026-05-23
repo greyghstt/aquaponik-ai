@@ -23,7 +23,8 @@ class TrainingResult:
 
 def train_random_forest(df: pd.DataFrame) -> TrainingResult:
     X = df[MODEL_FEATURES]
-    y = df["ai_status"].astype(str)
+    target_column = "final_ai_class" if "final_ai_class" in df.columns else "ai_status"
+    y = df[target_column].astype(str)
     counts = y.value_counts()
     stratify = y if counts.min() >= 2 and len(counts) > 1 else None
 
@@ -89,12 +90,12 @@ def predict_system_status(model: RandomForestClassifier, df: pd.DataFrame) -> pd
 
     # Safety layer: keep RF as the classifier, but prevent obvious domain-risk states
     # from being hidden as "Normal" in the operational dashboard.
-    if "ai_status" in result.columns and "risk_score" in result.columns:
-        hybrid_label = result["ai_status"].astype(str)
-        override_mask = (result["rf_prediction"] == "Normal") & (hybrid_label != "Normal") & (result["risk_score"] >= 20)
+    if "final_ai_class" in result.columns and "risk_score" in result.columns:
+        hybrid_label = result["final_ai_class"].astype(str)
+        override_mask = (result["rf_prediction"] == "Normal") & (hybrid_label != "Normal") & (result["risk_score"] >= 70)
         result.loc[override_mask, "rf_prediction"] = hybrid_label[override_mask]
         result.loc[override_mask, "rf_confidence_pct"] = np.maximum(
             result.loc[override_mask, "rf_confidence_pct"],
-            np.round(68 + result.loc[override_mask, "risk_score"] * 0.25, 1),
+            np.round(62 + result.loc[override_mask, "risk_score"] * 0.28, 1),
         )
     return result

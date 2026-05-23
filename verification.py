@@ -30,7 +30,9 @@ def verify_simulation(df: pd.DataFrame, training_df: pd.DataFrame, metrics: dict
     checks["water_temp_do_negative_corr"] = float(np.round(df["suhu_air_c"].corr(df["do_mg_l"]), 3))
     checks["light_air_temp_positive_corr"] = float(np.round(df["intensitas_cahaya_lux"].corr(df["suhu_udara_c"]), 3))
     checks["nitrate_smoother_than_ammonia"] = bool(df["nitrat_mg_l"].diff().abs().median() < df["amonia_mg_l"].diff().abs().median() * 80)
-    checks["all_ai_classes_in_training"] = sorted(training_df["ai_status"].astype(str).unique().tolist())
+    checks["all_ai_classes_in_training"] = sorted(training_df["final_ai_class"].astype(str).unique().tolist())
+    checks["risk_levels_in_poster"] = sorted(df["risk_level"].astype(str).unique().tolist())
+    checks["has_split_risk_columns"] = bool({"risk_score", "risk_level", "final_ai_class"}.issubset(df.columns))
     checks["macro_f1_minimum_met"] = bool(metrics["macro_f1"] >= 0.85)
     checks["accuracy_minimum_met"] = bool(metrics["accuracy"] >= 0.90)
 
@@ -50,11 +52,16 @@ def verify_simulation(df: pd.DataFrame, training_df: pd.DataFrame, metrics: dict
     checks["all_expected_files_exist"] = bool(all(checks["expected_files_exist"].values()))
     checks["domain_thresholds"] = {
         "pH_operasional": f"{RANGES.ph_min_ok}-{RANGES.ph_max_ok}",
-        "do_low_mg_l": RANGES.do_low_mg_l,
-        "suhu_air_tinggi_c": RANGES.water_temp_high_c,
-        "amonia_tinggi_mg_l": RANGES.ammonia_high_mg_l,
-        "nitrit_tinggi_mg_l": RANGES.nitrite_high_mg_l,
-        "ec_target_selada_ms_cm": f"{RANGES.ec_target_low_ms_cm}-{RANGES.ec_target_high_ms_cm}",
+        "pH_warning": f"{RANGES.ph_low_warning}-{RANGES.ph_high_warning}",
+        "pH_critical": f"<{RANGES.ph_low_critical} atau >{RANGES.ph_high_critical}",
+        "do_warning_mg_l": f"{RANGES.do_critical_mg_l}-{RANGES.do_warning_mg_l}",
+        "do_critical_mg_l": f"<{RANGES.do_critical_mg_l}",
+        "suhu_air_warning_c": f"{RANGES.water_temp_warning_c}-{RANGES.water_temp_critical_c}",
+        "suhu_air_critical_c": f">{RANGES.water_temp_critical_c}",
+        "amonia_warning_mg_l": f"{RANGES.ammonia_warning_mg_l}-{RANGES.ammonia_critical_mg_l}",
+        "nitrit_warning_mg_l": f"{RANGES.nitrite_warning_mg_l}-{RANGES.nitrite_critical_mg_l}",
+        "level_warning_pct": f"{RANGES.level_critical_pct}-{RANGES.level_warning_pct}",
+        "level_critical_pct": f"<{RANGES.level_critical_pct}",
     }
     checks["verification_passed"] = bool(
         checks["no_missing_values"]
@@ -62,6 +69,7 @@ def verify_simulation(df: pd.DataFrame, training_df: pd.DataFrame, metrics: dict
         and checks["sensor_ranges_ok"]
         and checks["water_temp_do_negative_corr"] < -0.25
         and checks["light_air_temp_positive_corr"] > 0.45
+        and checks["has_split_risk_columns"]
         and checks["macro_f1_minimum_met"]
         and checks["all_expected_files_exist"]
     )

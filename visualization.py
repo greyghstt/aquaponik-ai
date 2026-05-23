@@ -119,7 +119,8 @@ def plot_feature_importance(feature_importance: pd.DataFrame) -> Path:
 
 def plot_class_distribution(df: pd.DataFrame) -> Path:
     _setup()
-    counts = df["ai_status"].astype(str).value_counts().reindex(LABEL_ORDER, fill_value=0)
+    target_column = "final_ai_class" if "final_ai_class" in df.columns else "ai_status"
+    counts = df[target_column].astype(str).value_counts().reindex(LABEL_ORDER, fill_value=0)
     colors = [CLASS_COLORS[label] for label in counts.index]
     fig, ax = plt.subplots(figsize=(10.5, 5.4))
     ax.bar(counts.index, counts.values, color=colors)

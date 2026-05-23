@@ -1,7 +1,7 @@
 {
-  "accuracy": 0.9926,
-  "macro_f1": 0.9798,
-  "weighted_f1": 0.9927,
+  "accuracy": 0.9981,
+  "macro_f1": 0.9863,
+  "weighted_f1": 0.9981,
   "n_train": 1620,
   "n_test": 540,
   "labels_present": [
@@ -17,70 +17,70 @@
   ],
   "classification_report": {
     "Normal": {
-      "precision": 0.9969418960244648,
-      "recall": 0.9969418960244648,
-      "f1-score": 0.9969418960244648,
-      "support": 327.0
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 447.0
     },
     "DO rendah": {
-      "precision": 0.8421052631578947,
+      "precision": 0.9375,
       "recall": 1.0,
-      "f1-score": 0.9142857142857143,
-      "support": 16.0
+      "f1-score": 0.967741935483871,
+      "support": 15.0
     },
     "Amonia tinggi": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 41.0
+      "support": 20.0
     },
     "Nitrit tinggi": {
       "precision": 1.0,
-      "recall": 0.967741935483871,
-      "f1-score": 0.9836065573770492,
-      "support": 62.0
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 9.0
     },
     "Nutrisi rendah": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 13.0
+      "support": 5.0
     },
     "pH tidak stabil": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 37.0
+      "support": 32.0
     },
     "Level air rendah": {
       "precision": 1.0,
-      "recall": 0.8571428571428571,
-      "f1-score": 0.9230769230769231,
-      "support": 7.0
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 3.0
     },
     "Suhu air tinggi": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 18.0
+      "support": 3.0
     },
     "Risiko stres ikan": {
       "precision": 1.0,
-      "recall": 1.0,
-      "f1-score": 1.0,
-      "support": 19.0
+      "recall": 0.8333333333333334,
+      "f1-score": 0.9090909090909091,
+      "support": 6.0
     },
-    "accuracy": 0.9925925925925926,
+    "accuracy": 0.9981481481481481,
     "macro avg": {
-      "precision": 0.9821163510202623,
-      "recall": 0.9802029654056881,
-      "f1-score": 0.9797678989737947,
+      "precision": 0.9930555555555556,
+      "recall": 0.9814814814814815,
+      "f1-score": 0.9863147605083089,
       "support": 540.0
     },
     "weighted avg": {
-      "precision": 0.9934697855750486,
-      "recall": 0.9925925925925926,
-      "f1-score": 0.9927291045323833,
+      "precision": 0.9982638888888888,
+      "recall": 0.9981481481481481,
+      "f1-score": 0.9980938416422288,
       "support": 540.0
     }
   },

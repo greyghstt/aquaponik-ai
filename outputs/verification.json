@@ -4,8 +4,8 @@
   "no_missing_values": true,
   "hourly_timestamp_consistency": true,
   "sensor_ranges_ok": true,
-  "water_temp_do_negative_corr": -0.646,
-  "light_air_temp_positive_corr": 0.75,
+  "water_temp_do_negative_corr": -0.654,
+  "light_air_temp_positive_corr": 0.749,
   "nitrate_smoother_than_ammonia": true,
   "all_ai_classes_in_training": [
     "Amonia tinggi",
@@ -18,6 +18,12 @@
     "Suhu air tinggi",
     "pH tidak stabil"
   ],
+  "risk_levels_in_poster": [
+    "Critical",
+    "Normal",
+    "Warning"
+  ],
+  "has_split_risk_columns": true,
   "macro_f1_minimum_met": true,
   "accuracy_minimum_met": true,
   "expected_files_exist": {
@@ -35,11 +41,16 @@
   "all_expected_files_exist": true,
   "domain_thresholds": {
     "pH_operasional": "6.5-7.5",
-    "do_low_mg_l": 5.0,
-    "suhu_air_tinggi_c": 30.0,
-    "amonia_tinggi_mg_l": 0.5,
-    "nitrit_tinggi_mg_l": 0.25,
-    "ec_target_selada_ms_cm": "1.2-1.8"
+    "pH_warning": "6.4-7.6",
+    "pH_critical": "<6.2 atau >7.8",
+    "do_warning_mg_l": "4.0-5.0",
+    "do_critical_mg_l": "<4.0",
+    "suhu_air_warning_c": "30.0-32.0",
+    "suhu_air_critical_c": ">32.0",
+    "amonia_warning_mg_l": "0.5-1.0",
+    "nitrit_warning_mg_l": "0.5-1.0",
+    "level_warning_pct": "60.0-80.0",
+    "level_critical_pct": "<60.0"
   },
   "verification_passed": true
 }

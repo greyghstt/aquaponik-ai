@@ -6,30 +6,69 @@ import pandas as pd
 from config import LABEL_ORDER, RANGES
 
 
-def _severity(value: float, soft: float, hard: float, direction: str) -> float:
+def _severity(value: float, warning: float, critical: float, direction: str) -> float:
     if direction == "low":
-        if value >= soft:
+        if value >= warning:
             return 0.0
-        return min(1.0, (soft - value) / max(soft - hard, 1e-9))
-    if value <= soft:
+        return min(1.0, (warning - value) / max(warning - critical, 1e-9))
+    if value <= warning:
         return 0.0
-    return min(1.0, (value - soft) / max(hard - soft, 1e-9))
+    return min(1.0, (value - warning) / max(critical - warning, 1e-9))
+
+
+def _range_severity(
+    value: float,
+    low_warning: float,
+    high_warning: float,
+    low_critical: float,
+    high_critical: float,
+) -> float:
+    return max(
+        _severity(value, low_warning, low_critical, "low"),
+        _severity(value, high_warning, high_critical, "high"),
+    )
 
 
 def calculate_condition_scores(row: pd.Series) -> dict[str, float]:
-    do_score = _severity(row.do_mg_l, RANGES.do_low_mg_l, RANGES.do_critical_mg_l, "low")
-    ammonia_score = _severity(row.amonia_mg_l, RANGES.ammonia_high_mg_l, RANGES.ammonia_critical_mg_l, "high")
-    nitrite_score = _severity(row.nitrit_mg_l, RANGES.nitrite_high_mg_l, RANGES.nitrite_critical_mg_l, "high")
+    do_score = _severity(row.do_mg_l, RANGES.do_warning_mg_l, RANGES.do_critical_mg_l, "low")
+    ammonia_score = _severity(row.amonia_mg_l, RANGES.ammonia_warning_mg_l, RANGES.ammonia_critical_mg_l, "high")
+    nitrite_score = _severity(row.nitrit_mg_l, RANGES.nitrite_warning_mg_l, RANGES.nitrite_critical_mg_l, "high")
     nutrient_score = max(
-        _severity(row.ec_ms_cm, RANGES.ec_low_ms_cm, 0.72, "low"),
-        _severity(row.nitrat_mg_l, RANGES.nitrate_low_mg_l, 8.0, "low"),
+        _severity(row.nitrat_mg_l, RANGES.nitrate_warning_mg_l, RANGES.nitrate_critical_mg_l, "low"),
+        _range_severity(
+            row.ec_ms_cm,
+            RANGES.ec_low_warning_ms_cm,
+            RANGES.ec_high_warning_ms_cm,
+            RANGES.ec_low_critical_ms_cm,
+            RANGES.ec_high_critical_ms_cm,
+        ),
+        _range_severity(
+            row.tds_ppm,
+            RANGES.tds_low_warning_ppm,
+            RANGES.tds_high_warning_ppm,
+            RANGES.tds_low_critical_ppm,
+            RANGES.tds_high_critical_ppm,
+        ),
     )
-    ph_score = max(
-        _severity(row.ph_air, RANGES.ph_low_action, 6.05, "low"),
-        _severity(row.ph_air, RANGES.ph_high_action, 7.95, "high"),
+    ph_score = _range_severity(
+        row.ph_air,
+        RANGES.ph_low_warning,
+        RANGES.ph_high_warning,
+        RANGES.ph_low_critical,
+        RANGES.ph_high_critical,
     )
-    level_score = _severity(row.level_air_pct, RANGES.level_low_pct, RANGES.level_critical_pct, "low")
-    temp_score = _severity(row.suhu_air_c, RANGES.water_temp_high_c, RANGES.water_temp_critical_c, "high")
+    level_score = _severity(row.level_air_pct, RANGES.level_warning_pct, RANGES.level_critical_pct, "low")
+    temp_score = _severity(row.suhu_air_c, RANGES.water_temp_warning_c, RANGES.water_temp_critical_c, "high")
+    greenhouse_score = max(
+        _severity(row.suhu_udara_c, RANGES.air_temp_warning_c, RANGES.air_temp_critical_c, "high"),
+        _range_severity(
+            row.kelembapan_pct,
+            RANGES.humidity_low_warning_pct,
+            RANGES.humidity_high_warning_pct,
+            RANGES.humidity_low_critical_pct,
+            RANGES.humidity_high_critical_pct,
+        ),
+    )
 
     fish_stress_score = (
         0.30 * do_score
@@ -41,17 +80,18 @@ def calculate_condition_scores(row: pd.Series) -> dict[str, float]:
     )
     if row.do_mg_l < 4.6 and row.suhu_air_c > 30.0:
         fish_stress_score += 0.18
-    if row.amonia_mg_l > 0.55 and row.ph_air > 7.35:
+    if row.amonia_mg_l > 0.75 and row.ph_air > 7.5:
         fish_stress_score += 0.12
 
     overall = max(
         do_score,
         ammonia_score,
         nitrite_score,
-        nutrient_score * 0.82,
-        ph_score * 0.86,
-        level_score * 0.78,
-        temp_score * 0.88,
+        nutrient_score * 0.90,
+        ph_score * 0.92,
+        level_score * 0.84,
+        temp_score * 0.90,
+        greenhouse_score * 0.45,
         fish_stress_score,
     )
     return {
@@ -64,20 +104,29 @@ def calculate_condition_scores(row: pd.Series) -> dict[str, float]:
         "Level air rendah": level_score,
         "Suhu air tinggi": temp_score,
         "Risiko stres ikan": min(fish_stress_score, 1.0),
+        "Greenhouse warning": greenhouse_score,
         "overall": min(overall, 1.0),
     }
 
 
+def assign_risk_level(risk_score: float) -> str:
+    if risk_score >= 70:
+        return "Critical"
+    if risk_score >= 30:
+        return "Warning"
+    return "Normal"
+
+
 def assign_ai_label(row: pd.Series) -> str:
     scores = calculate_condition_scores(row)
-    if scores["overall"] < 0.18:
+    if scores["overall"] < 0.70:
         return "Normal"
 
     # Combined fish stress is more useful than a single alarm when several risks co-occur.
-    moderate_count = sum(scores[label] >= 0.35 for label in LABEL_ORDER if label not in {"Normal", "Risiko stres ikan"})
-    if scores["Risiko stres ikan"] >= 0.45 and moderate_count >= 2:
+    moderate_count = sum(scores[label] >= 0.45 for label in LABEL_ORDER if label not in {"Normal", "Risiko stres ikan"})
+    if scores["Risiko stres ikan"] >= 0.55 and moderate_count >= 2:
         return "Risiko stres ikan"
-    if scores["Risiko stres ikan"] >= 0.68:
+    if scores["Risiko stres ikan"] >= 0.72:
         return "Risiko stres ikan"
 
     priority = [
@@ -90,7 +139,7 @@ def assign_ai_label(row: pd.Series) -> str:
         "Nutrisi rendah",
     ]
     best = max(priority, key=lambda label: scores[label])
-    return best if scores[best] >= 0.24 else "Normal"
+    return best if scores[best] >= 0.70 else "Normal"
 
 
 def add_labels(df: pd.DataFrame) -> pd.DataFrame:
@@ -98,22 +147,30 @@ def add_labels(df: pd.DataFrame) -> pd.DataFrame:
     score_rows = []
     labels = []
     risk_scores = []
+    risk_levels = []
     for _, row in result.iterrows():
         scores = calculate_condition_scores(row)
         label = assign_ai_label(row)
         score_rows.append({f"score_{key}": value for key, value in scores.items() if key != "overall"})
         labels.append(label)
-        risk_scores.append(round(float(scores["overall"] * 100), 1))
+        risk_score = round(float(scores["overall"] * 100), 1)
+        risk_scores.append(risk_score)
+        risk_levels.append(assign_risk_level(risk_score))
     score_df = pd.DataFrame(score_rows, index=result.index)
     result = pd.concat([result, score_df], axis=1)
-    result["ai_status"] = pd.Categorical(labels, categories=LABEL_ORDER, ordered=False)
     result["risk_score"] = risk_scores
+    result["risk_level"] = risk_levels
+    result["final_ai_class"] = pd.Categorical(labels, categories=LABEL_ORDER, ordered=False)
+    result["ai_status"] = result["final_ai_class"]
     return result
 
 
 def recommendation_for_status(row: pd.Series) -> str:
-    status = str(row.ai_status)
+    status = str(row.get("final_ai_class", row.get("ai_status", "Normal")))
+    risk_level = str(row.get("risk_level", "Normal"))
     if status == "Normal":
+        if risk_level == "Warning":
+            return "Ada parameter mendekati batas; lanjutkan monitoring dan validasi sensor sebelum tindakan besar."
         return "Pertahankan pemantauan; sistem berada dalam rentang aman untuk ikan nila dan selada."
     if status == "DO rendah":
         return "Tingkatkan aerasi, cek diffuser, dan kurangi pemberian pakan sementara."
@@ -135,8 +192,11 @@ def recommendation_for_status(row: pd.Series) -> str:
 
 
 def action_for_status(row: pd.Series) -> str:
-    status = str(row.ai_status)
+    status = str(row.get("final_ai_class", row.get("ai_status", "Normal")))
+    risk_level = str(row.get("risk_level", "Normal"))
     actions = []
+    if risk_level == "Warning":
+        actions.append("monitoring intensif")
     if status in {"DO rendah", "Amonia tinggi", "Nitrit tinggi", "Suhu air tinggi", "Risiko stres ikan"}:
         actions.append("aerator ON")
     if status in {"Suhu air tinggi", "Risiko stres ikan"} or row.suhu_udara_c >= 31.5:
@@ -151,7 +211,8 @@ def action_for_status(row: pd.Series) -> str:
 
 
 def summarize_class_balance(df: pd.DataFrame) -> pd.DataFrame:
-    counts = df["ai_status"].astype(str).value_counts().reindex(LABEL_ORDER, fill_value=0)
-    out = counts.rename_axis("ai_status").reset_index(name="count")
+    target_column = "final_ai_class" if "final_ai_class" in df.columns else "ai_status"
+    counts = df[target_column].astype(str).value_counts().reindex(LABEL_ORDER, fill_value=0)
+    out = counts.rename_axis("final_ai_class").reset_index(name="count")
     out["percent"] = np.round(out["count"] / max(len(df), 1) * 100, 2)
     return out
