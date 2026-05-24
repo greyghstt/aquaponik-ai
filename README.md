@@ -8,6 +8,10 @@ Pipeline ini mensimulasikan pembacaan sensor realistis, melakukan labeling
 hybrid berbasis domain aquaponik, melatih model AI, membuat visualisasi, dan
 menampilkan dashboard interaktif menggunakan Streamlit.
 
+## Preview Dashboard
+
+![Preview dashboard Aquaponics AI](docs/dashboard-preview.png)
+
 ## Referensi Utama
 
 Referensi berikut dipakai sebagai acuan domain aquaponik, kualitas air,
