@@ -1,4 +1,4 @@
-# Grand Design AI Smart Greenhouse Aquaponik
+# Aquaponics AI
 
 Simulasi end-to-end **Smart Greenhouse Aquaponik ikan nila + selada**
 berbasis **Random Forest Classifier** untuk tugas mata kuliah
@@ -7,6 +7,41 @@ berbasis **Random Forest Classifier** untuk tugas mata kuliah
 Pipeline ini mensimulasikan pembacaan sensor realistis, melakukan labeling
 hybrid berbasis domain aquaponik, melatih model AI, membuat visualisasi, dan
 menampilkan dashboard interaktif menggunakan Streamlit.
+
+## Referensi Utama
+
+Referensi berikut dipakai sebagai acuan domain aquaponik, kualitas air,
+nitrifikasi, parameter hidroponik selada, dan pendekatan AI/IoT:
+
+- FAO, *Small-scale aquaponic food production: Integrated fish and plant
+  farming*:
+  https://www.fao.org/3/a-i4021e.pdf
+
+- Oklahoma State University Extension, *Principles of Small-Scale Aquaponics*:
+  https://extension.okstate.edu/fact-sheets/principles-of-small-scale-aquaponics
+
+- Oklahoma State University Extension, *Nitrification and Maintenance in Media
+  Bed Aquaponics*:
+  https://extension.okstate.edu/fact-sheets/nitrification-and-maintenance-in-media-bed-aquaponics.html
+
+- Oklahoma State University Extension, *Electrical Conductivity and pH Guide
+  for Hydroponics*:
+  https://extension.okstate.edu/fact-sheets/print-publications/hla/electrical-conductivity-and-ph-guide-for-hydroponics-hla-6722.pdf
+
+- New Mexico State University, *Important Water Quality Parameters in
+  Aquaponics Systems*:
+  https://pubs.nmsu.edu/_circulars/CR680/
+
+- Dhal et al., *Machine-Learning-Based IoT System for Optimizing Nutrient
+  Supply in Aquaponic Operations*:
+  https://www.mdpi.com/1424-8220/22/9/3510
+
+- *Scientific Reports*, *IoT-Based Prediction Model for Aquaponic Fish Pond
+  Water Quality*:
+  https://www.nature.com/articles/s41598-024-84943-7
+
+- Scikit-learn, *RandomForestClassifier Documentation*:
+  https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html
 
 ## Alur Sistem
 
@@ -135,9 +170,3 @@ realtime, tetapi visualisasi dashboard tetap diringkas agar grafik mudah dibaca.
 Labeling dipisahkan menjadi `risk_score`, `risk_level`, dan `final_ai_class`.
 Parameter warning menaikkan risiko, sedangkan kelas final baru berubah ketika
 kondisi sudah cukup dominan atau mendekati critical.
-
-## Referensi Domain
-
-- Oklahoma State University Extension: prinsip small-scale aquaponics.
-- UF/IFAS Extension: kualitas air, DO, amonia, dan nitrit pada sistem ikan.
-- FAO: parameter utama monitoring small-scale aquaponic food production.
