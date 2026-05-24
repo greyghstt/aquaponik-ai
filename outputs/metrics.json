@@ -1,9 +1,9 @@
 {
-  "accuracy": 0.9981,
-  "macro_f1": 0.9628,
-  "weighted_f1": 0.9978,
-  "n_train": 1620,
-  "n_test": 540,
+  "accuracy": 0.9998,
+  "macro_f1": 0.9983,
+  "weighted_f1": 0.9998,
+  "n_train": 19440,
+  "n_test": 6480,
   "labels_present": [
     "Normal",
     "DO rendah",
@@ -17,75 +17,76 @@
   ],
   "classification_report": {
     "Normal": {
-      "precision": 0.9978494623655914,
-      "recall": 1.0,
-      "f1-score": 0.9989235737351991,
-      "support": 464.0
+      "precision": 1.0,
+      "recall": 0.9998131888660564,
+      "f1-score": 0.9999065857076133,
+      "support": 5353.0
     },
     "DO rendah": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 13.0
+      "support": 195.0
     },
     "Amonia tinggi": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 12.0
+      "support": 96.0
     },
     "Nitrit tinggi": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 5.0
+      "support": 118.0
     },
     "Nutrisi rendah": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 5.0
+      "support": 248.0
     },
     "pH tidak stabil": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 31.0
+      "support": 312.0
     },
     "Level air rendah": {
-      "precision": 1.0,
+      "precision": 0.9696969696969697,
       "recall": 1.0,
-      "f1-score": 1.0,
-      "support": 2.0
+      "f1-score": 0.9846153846153847,
+      "support": 32.0
     },
     "Suhu air tinggi": {
       "precision": 1.0,
-      "recall": 0.5,
-      "f1-score": 0.6666666666666666,
-      "support": 2.0
+      "recall": 1.0,
+      "f1-score": 1.0,
+      "support": 59.0
     },
     "Risiko stres ikan": {
       "precision": 1.0,
       "recall": 1.0,
       "f1-score": 1.0,
-      "support": 6.0
+      "support": 67.0
     },
-    "accuracy": 0.9981481481481481,
+    "accuracy": 0.9998456790123457,
     "macro avg": {
-      "precision": 0.9997610513739547,
-      "recall": 0.9444444444444444,
-      "f1-score": 0.9628433600446518,
-      "support": 540.0
+      "precision": 0.9966329966329965,
+      "recall": 0.9999792432073397,
+      "f1-score": 0.9982802189247776,
+      "support": 6480.0
     },
     "weighted avg": {
-      "precision": 0.9981521306252489,
-      "recall": 0.9981481481481481,
-      "f1-score": 0.9978405028638254,
-      "support": 540.0
+      "precision": 0.9998503554059109,
+      "recall": 0.9998456790123457,
+      "f1-score": 0.9998468588889732,
+      "support": 6480.0
     }
   },
   "plot_paths": {
     "sensor_trends": "C:\\vscode\\Grand Design AI\\outputs\\plots\\tren_sensor_14_hari.png",
+    "dashboard_trends": "C:\\vscode\\Grand Design AI\\outputs\\plots\\dashboard_tren_sensor.png",
     "status_timeline": "C:\\vscode\\Grand Design AI\\outputs\\plots\\status_ai_timeline.png",
     "feature_importance": "C:\\vscode\\Grand Design AI\\outputs\\plots\\feature_importance_rf.png",
     "class_distribution": "C:\\vscode\\Grand Design AI\\outputs\\plots\\distribusi_kelas.png",

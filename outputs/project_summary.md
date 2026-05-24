@@ -6,24 +6,25 @@ sensor -> preprocessing -> AI -> klasifikasi -> rekomendasi -> tindakan semi-oto
 ## Output AI Terakhir
 - Final AI class: Normal
 - Raw Random Forest class: Normal
-- Confidence RF: 95.3%
+- Confidence RF: 98.4%
 - Skor risiko: 0.0/100
 - Risk level: Normal
 - Rekomendasi: Pertahankan pemantauan; sistem berada dalam rentang aman untuk ikan nila dan selada.
 - Tindakan semi-otomatis: monitoring normal
 
 ## Evaluasi Model
-- Accuracy: 0.9981
-- Macro F1: 0.9628
-- Weighted F1: 0.9978
-- Data training: 1620 baris
-- Data uji: 540 baris
+- Accuracy: 0.9998
+- Macro F1: 0.9983
+- Weighted F1: 0.9998
+- Data training: 19440 baris
+- Data uji: 6480 baris
 
 ## Verifikasi Simulasi
 - Verifikasi lulus: True
-- Korelasi suhu air vs DO: -0.654
-- Korelasi cahaya vs suhu udara: 0.749
-- Timestamp per jam konsisten: True
+- Korelasi suhu air vs DO: -0.626
+- Korelasi cahaya vs suhu udara: 0.758
+- Interval timestamp: 5 menit
+- Interval timestamp konsisten: True
 - Rentang sensor realistis: True
 
 ## Catatan Referensi Domain

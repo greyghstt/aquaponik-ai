@@ -1,11 +1,12 @@
 {
-  "poster_rows": 336,
-  "training_rows": 2160,
+  "poster_rows": 5760,
+  "training_rows": 25920,
   "no_missing_values": true,
-  "hourly_timestamp_consistency": true,
+  "timestamp_interval_minutes": 5,
+  "timestamp_interval_consistency": true,
   "sensor_ranges_ok": true,
-  "water_temp_do_negative_corr": -0.654,
-  "light_air_temp_positive_corr": 0.749,
+  "water_temp_do_negative_corr": -0.626,
+  "light_air_temp_positive_corr": 0.758,
   "nitrate_smoother_than_ammonia": true,
   "all_ai_classes_in_training": [
     "Amonia tinggi",
@@ -18,6 +19,7 @@
     "Suhu air tinggi",
     "pH tidak stabil"
   ],
+  "all_final_classes_present_in_training": true,
   "risk_levels_in_poster": [
     "Critical",
     "Normal",
@@ -33,6 +35,7 @@
     "C:\\vscode\\Grand Design AI\\outputs\\dashboard.html": true,
     "C:\\vscode\\Grand Design AI\\outputs\\rf_model.joblib": true,
     "C:\\vscode\\Grand Design AI\\outputs\\plots\\tren_sensor_14_hari.png": true,
+    "C:\\vscode\\Grand Design AI\\outputs\\plots\\dashboard_tren_sensor.png": true,
     "C:\\vscode\\Grand Design AI\\outputs\\plots\\status_ai_timeline.png": true,
     "C:\\vscode\\Grand Design AI\\outputs\\plots\\feature_importance_rf.png": true,
     "C:\\vscode\\Grand Design AI\\outputs\\plots\\distribusi_kelas.png": true,

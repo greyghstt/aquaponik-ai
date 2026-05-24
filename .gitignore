@@ -11,3 +11,6 @@ env/
 !.env.example
 .DS_Store
 Thumbs.db
+outputs/_ui_first_screen*.png
+# CocoIndex Code (ccc)
+/.cocoindex_code/

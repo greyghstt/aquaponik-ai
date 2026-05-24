@@ -23,6 +23,11 @@ CLASS_COLORS = {
 }
 
 
+def _duration_days(df: pd.DataFrame) -> int:
+    span_days = (df["timestamp"].max() - df["timestamp"].min()).total_seconds() / 86400
+    return int(round(span_days))
+
+
 def _setup() -> None:
     PLOTS_DIR.mkdir(parents=True, exist_ok=True)
     plt.rcParams.update(
@@ -73,9 +78,42 @@ def plot_sensor_trends(df: pd.DataFrame) -> Path:
 
     for ax in axes:
         _format_time_axis(ax)
-    fig.suptitle("Tren Sensor Smart Greenhouse Aquaponik 14 Hari", fontsize=16)
+    fig.suptitle(f"Tren Sensor Smart Greenhouse Aquaponik {_duration_days(df)} Hari", fontsize=16)
     fig.tight_layout(rect=(0, 0, 1, 0.97))
     out = PLOTS_DIR / "tren_sensor_14_hari.png"
+    fig.savefig(out, bbox_inches="tight")
+    plt.close(fig)
+    return out
+
+
+def plot_dashboard_trends(df: pd.DataFrame) -> Path:
+    _setup()
+    fig, axes = plt.subplots(3, 1, figsize=(13.5, 6.3), sharex=True)
+    time = df["timestamp"]
+
+    axes[0].plot(time, df["suhu_air_c"], color="#D84315", label="Suhu air (C)", linewidth=1.6)
+    axes[0].plot(time, df["do_mg_l"], color="#1565C0", label="DO (mg/L)", linewidth=1.5)
+    axes[0].axhline(5.0, color="#1565C0", linestyle="--", alpha=0.35)
+    axes[0].set_ylabel("Ikan")
+    axes[0].legend(ncol=3, loc="upper left")
+
+    axes[1].plot(time, df["amonia_mg_l"], color="#C62828", label="Amonia", linewidth=1.2)
+    axes[1].plot(time, df["nitrit_mg_l"], color="#AD1457", label="Nitrit", linewidth=1.2)
+    axes[1].plot(time, df["ph_air"], color="#6A1B9A", label="pH", linewidth=1.2)
+    axes[1].set_ylabel("Air")
+    axes[1].legend(ncol=3, loc="upper left")
+
+    axes[2].plot(time, df["nitrat_mg_l"], color="#2E7D32", label="Nitrat", linewidth=1.4)
+    axes[2].plot(time, df["ec_ms_cm"], color="#EF6C00", label="EC", linewidth=1.2)
+    axes[2].plot(time, df["level_air_pct"], color="#00838F", label="Level air (%)", linewidth=1.3)
+    axes[2].set_ylabel("Nutrisi")
+    axes[2].legend(ncol=3, loc="upper left")
+
+    for ax in axes:
+        _format_time_axis(ax)
+    fig.suptitle(f"Ringkasan Tren Sensor {_duration_days(df)} Hari", fontsize=14)
+    fig.tight_layout(rect=(0, 0, 1, 0.95))
+    out = PLOTS_DIR / "dashboard_tren_sensor.png"
     fig.savefig(out, bbox_inches="tight")
     plt.close(fig)
     return out
@@ -166,6 +204,7 @@ def create_all_plots(
 ) -> dict[str, str]:
     paths = {
         "sensor_trends": plot_sensor_trends(poster_df),
+        "dashboard_trends": plot_dashboard_trends(poster_df),
         "status_timeline": plot_status_timeline(poster_df),
         "feature_importance": plot_feature_importance(feature_importance),
         "class_distribution": plot_class_distribution(training_df),

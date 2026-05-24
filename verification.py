@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from config import OUTPUT_DIR, PLOTS_DIR, RANGES
+from config import LABEL_ORDER, OUTPUT_DIR, PLOTS_DIR, RANGES
 
 
 def verify_simulation(df: pd.DataFrame, training_df: pd.DataFrame, metrics: dict) -> dict:
@@ -14,8 +14,10 @@ def verify_simulation(df: pd.DataFrame, training_df: pd.DataFrame, metrics: dict
     checks["poster_rows"] = int(len(df))
     checks["training_rows"] = int(len(training_df))
     checks["no_missing_values"] = bool(not df.isna().any().any() and not training_df.isna().any().any())
-    deltas = df["timestamp"].diff().dropna().dt.total_seconds() / 3600
-    checks["hourly_timestamp_consistency"] = bool((deltas == 1).all())
+    deltas_minutes = df["timestamp"].diff().dropna().dt.total_seconds() / 60
+    expected_interval = float(deltas_minutes.mode().iloc[0])
+    checks["timestamp_interval_minutes"] = int(expected_interval)
+    checks["timestamp_interval_consistency"] = bool((deltas_minutes == expected_interval).all())
 
     checks["sensor_ranges_ok"] = bool(
         df["ph_air"].between(5.8, 8.2).all()
@@ -31,6 +33,9 @@ def verify_simulation(df: pd.DataFrame, training_df: pd.DataFrame, metrics: dict
     checks["light_air_temp_positive_corr"] = float(np.round(df["intensitas_cahaya_lux"].corr(df["suhu_udara_c"]), 3))
     checks["nitrate_smoother_than_ammonia"] = bool(df["nitrat_mg_l"].diff().abs().median() < df["amonia_mg_l"].diff().abs().median() * 80)
     checks["all_ai_classes_in_training"] = sorted(training_df["final_ai_class"].astype(str).unique().tolist())
+    checks["all_final_classes_present_in_training"] = bool(
+        set(LABEL_ORDER).issubset(set(checks["all_ai_classes_in_training"]))
+    )
     checks["risk_levels_in_poster"] = sorted(df["risk_level"].astype(str).unique().tolist())
     checks["has_split_risk_columns"] = bool({"risk_score", "risk_level", "final_ai_class"}.issubset(df.columns))
     checks["macro_f1_minimum_met"] = bool(metrics["macro_f1"] >= 0.85)
@@ -43,6 +48,7 @@ def verify_simulation(df: pd.DataFrame, training_df: pd.DataFrame, metrics: dict
         OUTPUT_DIR / "dashboard.html",
         OUTPUT_DIR / "rf_model.joblib",
         PLOTS_DIR / "tren_sensor_14_hari.png",
+        PLOTS_DIR / "dashboard_tren_sensor.png",
         PLOTS_DIR / "status_ai_timeline.png",
         PLOTS_DIR / "feature_importance_rf.png",
         PLOTS_DIR / "distribusi_kelas.png",
@@ -65,11 +71,12 @@ def verify_simulation(df: pd.DataFrame, training_df: pd.DataFrame, metrics: dict
     }
     checks["verification_passed"] = bool(
         checks["no_missing_values"]
-        and checks["hourly_timestamp_consistency"]
+        and checks["timestamp_interval_consistency"]
         and checks["sensor_ranges_ok"]
         and checks["water_temp_do_negative_corr"] < -0.25
         and checks["light_air_temp_positive_corr"] > 0.45
         and checks["has_split_risk_columns"]
+        and checks["all_final_classes_present_in_training"]
         and checks["macro_f1_minimum_met"]
         and checks["all_expected_files_exist"]
     )
