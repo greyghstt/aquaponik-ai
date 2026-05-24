@@ -92,13 +92,13 @@ Model mengklasifikasikan kondisi sistem ke dalam:
 Install dependensi jika diperlukan:
 
 ```powershell
-rtk pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 Jalankan pipeline:
 
 ```powershell
-rtk python main.py
+python main.py
 ```
 
 Semua hasil akan dibuat ulang di folder `outputs/`.
@@ -106,7 +106,7 @@ Semua hasil akan dibuat ulang di folder `outputs/`.
 Jalankan dashboard Streamlit:
 
 ```powershell
-rtk streamlit run app.py
+streamlit run app.py
 ```
 
 Dashboard dapat dibuka di browser pada alamat yang ditampilkan Streamlit,
