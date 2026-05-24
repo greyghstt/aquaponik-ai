@@ -45,7 +45,6 @@ def verify_simulation(df: pd.DataFrame, training_df: pd.DataFrame, metrics: dict
         OUTPUT_DIR / "sensor_dataset.csv",
         OUTPUT_DIR / "training_dataset.csv",
         OUTPUT_DIR / "metrics.json",
-        OUTPUT_DIR / "dashboard.html",
         OUTPUT_DIR / "rf_model.joblib",
         PLOTS_DIR / "tren_sensor_14_hari.png",
         PLOTS_DIR / "dashboard_tren_sensor.png",

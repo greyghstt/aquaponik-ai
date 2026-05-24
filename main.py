@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 
 from config import OUTPUT_DIR, PLOTS_DIR, POSTER_DAYS, REFERENCE_LINKS, REFERENCE_NOTES, TRAINING_DAYS
-from dashboard import build_dashboard
 from labeling import add_labels, action_for_status, recommendation_for_status, summarize_class_balance
 from model_training import predict_system_status, save_model, train_random_forest
 from simulator import generate_sensor_data
@@ -71,7 +70,6 @@ def main() -> None:
         feature_importance=result.feature_importance,
         confusion=result.confusion,
     )
-    dashboard_path = build_dashboard(poster_predicted, result.metrics, plot_paths)
 
     training_df.to_csv(OUTPUT_DIR / "training_dataset.csv", index=False)
     poster_predicted.to_csv(OUTPUT_DIR / "sensor_dataset.csv", index=False)
@@ -82,7 +80,6 @@ def main() -> None:
     metrics = {
         **result.metrics,
         "plot_paths": plot_paths,
-        "dashboard_path": str(dashboard_path),
     }
     save_json(metrics, OUTPUT_DIR / "metrics.json")
     verification = verify_simulation(poster_predicted, training_df, result.metrics)
@@ -90,7 +87,7 @@ def main() -> None:
     _write_project_summary(poster_predicted.iloc[-1], result.metrics, verification)
 
     print("Grand Design AI Smart Greenhouse Aquaponik simulation complete.")
-    print(f"Dashboard: {dashboard_path}")
+    print("Dashboard Streamlit: streamlit run app.py")
     print(f"Accuracy: {result.metrics['accuracy']:.4f}")
     print(f"Macro F1: {result.metrics['macro_f1']:.4f}")
     print(f"Verification passed: {verification['verification_passed']}")

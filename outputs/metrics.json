@@ -91,6 +91,5 @@
     "feature_importance": "C:\\vscode\\Grand Design AI\\outputs\\plots\\feature_importance_rf.png",
     "class_distribution": "C:\\vscode\\Grand Design AI\\outputs\\plots\\distribusi_kelas.png",
     "confusion_matrix": "C:\\vscode\\Grand Design AI\\outputs\\plots\\confusion_matrix.png"
-  },
-  "dashboard_path": "C:\\vscode\\Grand Design AI\\outputs\\dashboard.html"
+  }
 }
